@@ -84,9 +84,12 @@ jobs:
         with:
           name: preview.gif
 
+      - uses: olegtarasov/get-tag@v2
+        id: tagName
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: Automated update of preview.gif
           title: Updated preview.gif by create-pull-request@v3 action
-          branch: create-pull-request/previewgif
+          branch: create-pull-request/previewgif-${{ steps.tagName.outputs.tag }}
