@@ -34,11 +34,12 @@ jobs:
         with:
           name: preview.gif
 
+      - uses: olegtarasov/get-tag@v2
+
       - name: Set tag
         id: vars
         run: |
-          TAGNAME=$(git describe --tags)
-          echo ::set-output name=tag::$TAGNAME
+          echo ::set-output name=tag::$GIT_TAG_NAME
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
