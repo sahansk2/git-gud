@@ -34,9 +34,6 @@ jobs:
         with:
           name: preview.gif
 
-      - uses: olegtarasov/get-tag@v2
-        id: tagname
-
       - name: Set tag
         id: vars
         run: |
