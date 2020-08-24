@@ -158,6 +158,8 @@ def test_get_working_staging_content_added(file_operator, content_level):
     assert "Welcome.txt" not in working_data
     assert "dir/dirfile.txt" not in working_data
 
+def test_neverworks(file_operator):
+    assert 0
 
 def write_file(filepath):
     with open(Path(filepath), "w") as newfile:
