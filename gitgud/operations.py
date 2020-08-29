@@ -299,14 +299,14 @@ class Operator():
                 'id': tag.name
             }
 
-        while len(commits) > 0:
+        while commits:
             cur_commit = commits.pop()
             if cur_commit not in visited:
                 for parent in cur_commit.parents:
                     commits.add(parent)
             visited.add(cur_commit)
 
-        while len(visited) > 0:
+        while visited:
             cur_commit = visited.pop()
             commit_hash = cur_commit.hexsha
 
@@ -402,11 +402,10 @@ class Operator():
             for name, commit_hash in reader:
                 if commit_hash == original_hash:
                     rebase_name = name + "'"
+                    self.track_commit(rebase_name, rebase_hash)
                     break
-        if rebase_name is not None:
-            self.track_commit(rebase_name, rebase_hash)
-        else:
-            raise KeyError('Original hash not found')
+            else:
+                raise KeyError('Original hash not found')
 
     def track_commit(self, name, commit_hash):
         with open(self.commits_path, 'a') as commit_file:

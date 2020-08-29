@@ -38,19 +38,19 @@ def test_update_progress_file(file_operator, progress_data, level):
 
 def test_mark_level_visited(file_operator, level):
     assert file_operator.level_progress(level) == "unvisited"
-    file_operator.mark_level(level, "visited")
+    level.progress = "visited"
     assert file_operator.level_progress(level) == "visited"
 
 
 def test_mark_level_complete(file_operator, level):
     assert file_operator.level_progress(level) == "unvisited"
-    file_operator.mark_level(level, "complete")
+    level.progress = "complete"
     assert file_operator.level_progress(level) == "complete"
 
 
 def test_mark_level_partial(file_operator, level):
     assert file_operator.level_progress(level) == "unvisited"
-    file_operator.mark_level(level, "partial")
+    level.progress = "partial"
     assert file_operator.level_progress(level) == "partial"
 
 
@@ -62,5 +62,5 @@ def test_mark_level_hierarchy(file_operator, level):
         file_operator.mark_level(level, status)
         for weaker in hierarchy[index::-1]:
             initial_status = level.progress
-            file_operator.mark_level(level, weaker)
+            level.progress = weaker
             assert initial_status == level.progress
