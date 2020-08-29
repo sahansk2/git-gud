@@ -262,7 +262,7 @@ class GitGud:
 
         if not skip_level_check:
             try:
-                get_operator().get_level()
+                get_operator().level
             except KeyError:
                 level_name = get_operator().read_level_file()
                 raise InitializationError(
@@ -321,7 +321,7 @@ class GitGud:
     def handle_status(self, args):
         if self.is_initialized():
             try:
-                level = get_operator().get_level()
+                level = get_operator().level
                 level.status()
             except KeyError:
                 level_name = get_operator().read_level_file()
@@ -333,25 +333,25 @@ class GitGud:
 
     def handle_explain(self, args):
         self.assert_initialized()
-        get_operator().get_level().explain()
+        get_operator().level.explain()
 
     def handle_goal(self, args):
         self.assert_initialized()
-        get_operator().get_level().goal()
+        get_operator().level.goal()
 
     def handle_reset(self, args):
         self.assert_initialized()
-        level = get_operator().get_level()
+        level = get_operator().level
         self.load_level(level)
 
     def handle_test(self, args):
         self.assert_initialized()
-        level = get_operator().get_level()
+        level = get_operator().level
         level.test()
 
     def handle_solution(self, args):
         self.assert_initialized()
-        current_level = get_operator().get_level()
+        current_level = get_operator().level
         if not args.confirm and \
                 not current_level.has_ever_been_completed():
             handle_solution_confirmation(current_level)
@@ -360,7 +360,7 @@ class GitGud:
 
     def handle_level(self, args):
         self.assert_initialized()
-        level = get_operator().get_level()
+        level = get_operator().level
         skill = level.skill
         show_skill_tree(
                 [skill, level],
@@ -390,7 +390,7 @@ class GitGud:
                     print('You may run "git gud levels --all" or "git gud levels --skills" to print all the skills.')  # noqa: E501
                     return
             elif self.is_initialized():
-                current_skill = get_operator().get_level().skill
+                current_skill = get_operator().level.skill
                 skills_to_show = [current_skill]
                 print('Levels in the current skill "{}" :'.format(current_skill.name))  # noqa: E501
             else:
@@ -418,7 +418,7 @@ class GitGud:
 
                 self.assert_initialized("Cannot load {} level."
                                         .format(args.skill_name))
-                level = get_operator().get_level()
+                level = get_operator().level
 
                 if args.skill_name == "next":
                     if not args.force and not level.has_ever_been_completed():
@@ -451,7 +451,7 @@ class GitGud:
 
         if not args.skill_name:
             args.skill_name, loaded_level_name = get_operator() \
-                    .get_level_identifier()
+                    .level_identifier
             print("Inferring skill from currently loaded level: {} {}"
                   .format(args.skill_name, loaded_level_name))
         if not args.level_name:
@@ -472,7 +472,7 @@ class GitGud:
     def handle_commit(self, args):
         self.assert_initialized()
         file_operator = get_operator()
-        last_commit = file_operator.get_last_commit()
+        last_commit = file_operator.last_commit
         commit_name = str(int(last_commit) + 1)
 
         if args.file is not None:

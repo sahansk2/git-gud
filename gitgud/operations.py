@@ -264,7 +264,8 @@ class Operator():
         if head_is_commit:
             self.repo.git.checkout(commit_objects[head])
 
-    def get_current_tree(self):
+    @property
+    def current_tree(self):
         # Return a json object with the same structure as in level_json
 
         repo = self.repo
@@ -348,7 +349,7 @@ class Operator():
         with open(self.progress_path, 'w') as progress_file:
             json.dump(progress_data, progress_file)
 
-    def get_level_progress(self, level):
+    def level_progress(self, level):
         progress_data = self.read_progress_file()
         return progress_data[level.skill.name][level.name]
 
@@ -357,7 +358,7 @@ class Operator():
         hierarchy = [
             "unvisited", "visited", "partial", "complete"
         ]
-        current_progress = self.get_level_progress(level)
+        current_progress = self.level_progress(level)
         if hierarchy.index(status) > hierarchy.index(current_progress):
             progress_data[level.skill.name].update(
                 {level.name: status}
@@ -372,14 +373,17 @@ class Operator():
         with open(self.level_path, 'w') as skill_file:
             skill_file.write(' '.join([level.skill.name, level.name]))
 
-    def get_level_identifier(self):
+    @property
+    def level_identifier(self):
         return self.read_level_file().split()
 
-    def get_level(self):
-        skill_name, level_name = self.get_level_identifier()
+    @property
+    def level(self):
+        skill_name, level_name = self.level_identifier
         return skills.all_skills[skill_name][level_name]
 
-    def get_last_commit(self):
+    @property
+    def last_commit(self):
         with open(self.last_commit_path) as last_commit_file:
             return last_commit_file.read()
 
@@ -409,7 +413,8 @@ class Operator():
             commit_file.write(','.join([name, commit_hash]))
             commit_file.write('\n')
 
-    def get_known_commits(self):
+    @property
+    def known_commits(self):
         known_commits = {}
         with open(self.commits_path, 'r') as commit_file:
             reader = csv.reader(commit_file)
@@ -417,7 +422,7 @@ class Operator():
                 known_commits[commit_hash] = name
         return known_commits
 
-    def get_diffs(self, known_commits):
+    def diffs(self, known_commits):
         diffs = {}
         for commit_hash, commit_name in known_commits.items():
             if commit_name == '1':
@@ -434,8 +439,8 @@ class Operator():
             diffs[anti_diff] = commit_name + '-'
         return diffs
 
-    def get_copy_mapping(self, non_merges, known_commits):
-        diffs = self.get_diffs(known_commits)
+    def copy_mapping(self, non_merges, known_commits):
+        diffs = self.diffs(known_commits)
         mapping = {}
         for commit_hash in non_merges:
             if commit_hash in known_commits:
@@ -445,7 +450,6 @@ class Operator():
                 mapping[commit_hash] = diffs[diff]
 
         return mapping
-
 
 def get_operator():
     for path in (Path.cwd() / "_").parents:

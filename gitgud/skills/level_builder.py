@@ -60,7 +60,7 @@ class Level:
         show_level_name(self)
 
     def has_ever_been_completed(self):
-        return self.get_progress() == "complete"
+        return self.progress == "complete"
 
     def _test(self):
         raise NotImplementedError
@@ -94,9 +94,10 @@ class Level:
         file_operator = operations.get_operator()
         file_operator.mark_level(self, "visited")
 
-    def get_progress(self):
+    @property
+    def progress(self):
         file_operator = operations.get_operator()
-        return file_operator.get_level_progress(self)
+        return file_operator.level_progress(self)
 
 
 class BasicLevel(Level):
@@ -168,7 +169,7 @@ class BasicLevel(Level):
 
         # Get commit trees
         test_tree = level_json(*parse_spec(self.file('test.spec')))
-        level_tree = file_operator.get_current_tree()
+        level_tree = file_operator.current_tree
 
         # Make all user-created branches lowecase
         setup_tree = level_json(*parse_spec(self.file('setup.spec')))
@@ -178,14 +179,14 @@ class BasicLevel(Level):
         non_merges = get_non_merges(level_tree)
 
         # Name known commits
-        known_commits = file_operator.get_known_commits()
+        known_commits = file_operator.known_commits
         name_from_map(level_tree, known_commits)
 
         # Name rebases and cherrypicks
         known_non_merges = {commit_hash: name
                             for commit_hash, name in known_commits.items()
                             if name[:1] != 'M'}
-        diff_map = file_operator.get_copy_mapping(non_merges, known_non_merges)
+        diff_map = file_operator.copy_mapping(non_merges, known_non_merges)
         name_from_map(level_tree, diff_map)
 
         # Name merges
