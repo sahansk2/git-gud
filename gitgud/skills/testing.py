@@ -13,4 +13,5 @@ def simulate(gg, level, commands, run_pretest=True):
             assert not level._test()
         subprocess.call(command, shell=True)
 
+    subprocess.call('git gud test', shell=True)
     assert level._test()
