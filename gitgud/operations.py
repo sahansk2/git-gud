@@ -378,7 +378,7 @@ class Operator():
         return self.read_level_file().split()
 
     @property
-    def level(self):
+    def current_level(self):
         skill_name, level_name = self.level_identifier
         return skills.all_skills[skill_name][level_name]
 
