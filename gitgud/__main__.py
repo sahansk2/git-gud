@@ -487,7 +487,7 @@ class GitGud:
 
         # Next "git gud commit" name
         if int(commit_name) > int(last_commit):
-            file_operator.write_last_commit(commit_name)
+            file_operator.last_commit = commit_name
 
     def handle_show(self, args):
         if args.cmd == "tree":

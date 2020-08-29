@@ -387,7 +387,8 @@ class Operator():
         with open(self.last_commit_path) as last_commit_file:
             return last_commit_file.read()
 
-    def write_last_commit(self, name):
+    @last_commit.setter
+    def last_commit(self, name):
         with open(self.last_commit_path, 'w+') as last_commit_file:
             last_commit_file.write(name)
 

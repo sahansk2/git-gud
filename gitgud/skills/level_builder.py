@@ -127,7 +127,7 @@ class BasicLevel(Level):
             except ValueError:
                 pass  # Commit is merge and doesn't have number
 
-        file_operator.write_last_commit(latest_commit)
+        file_operator.last_commit = latest_commit
 
     def post_setup(self):
         self.cat_file('goal.txt')
