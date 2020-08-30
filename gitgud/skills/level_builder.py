@@ -44,7 +44,7 @@ class Level:
 
     def setup(self):
         self._setup()
-        self.progress == 'visited'
+        self.mark('visited')
         self.post_setup()
 
     def post_setup(self):
@@ -87,8 +87,7 @@ class Level:
         file_operator = operations.get_operator()
         return file_operator.level_progress(self)
 
-    @progress.setter
-    def progress(self, value):
+    def mark(self, value):
         if value not in {"complete", "partial", "visited", "unvisited"}:
             raise ValueError
         file_operator = operations.get_operator()
@@ -191,7 +190,7 @@ class BasicLevel(Level):
         return test_ancestry(level_tree, test_tree)
 
     def test_passed(self):
-        self.progress = 'complete'
+        self.mark('complete')
         if self.file('passed.txt').exists():
             self.cat_file('passed.txt')
         else:
